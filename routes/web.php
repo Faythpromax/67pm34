@@ -1,37 +1,32 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-// Route::prefix('product') -> group(function () {
-//     Route::get('/', action: function () {
-//         return view('product.index');
-//     });
-
-//     Route::get('/add', function () {
-//         return view('product.add');
-//     })->name('add');
-
-//     Route::get('/{id}', function (int $id) {
-//         return view('product.detail', ['id' => $id]);
-//     });
-// });
+use App\Http\Controllers\ProductController;
 
 Route::get('', function () {
     return view('home');
 });
 
 Route::prefix('product') -> group(function () {
-    Route::get('/', action: function () {
-        return view('product.index');
-    });
+    // Route::get('/', action: function () {
+    //     return view('product.index');
+    // });
 
-    Route::get('/add', function () {
-        return view('product.add');
-    })->name('add');
+        Route::controller(ProductController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::get('/add', 'create')->name('add');
+            Route::get('/detail/{id?}', 'getDetail');
+            Route::post('/store', 'store');
+            Route::post('/checklogin', 'checkLogin');
+            Route::get('/login', 'login');
+            Route::get('/logindone', 'loginDone');
+            Route::get('/register', 'register');
+            Route::post('/checkRegister', 'checkRegister');
+        });
 
-    Route::get('/{id}', function (int $id) {
-        return view('product.detail', ['id' => $id]);
-        
-    });
+    // Route::get('/', [ProductController::class, 'index']);
+    // Route::get('/add', [ProductController::class, 'create'])->name('add');
+    // Route::get('/detail/{id?}', [ProductController::class, 'getDetail']);
 });
 
 Route::get('sinhvien', function () {

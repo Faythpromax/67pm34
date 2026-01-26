@@ -4,6 +4,6 @@
     <title>Hello</title>
 </head>
 <body>
-    <h1>Day là trang chu</h1>
+    <h1>Day la trang chu</h1>
 </body>
 </html>

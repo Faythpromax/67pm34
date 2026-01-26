@@ -14,3 +14,7 @@
         name mặc định "Luong Xuan Hieu", mssv mặc định "123456" (in ra text thôi)
     - "/banco/{n}": trả về view banco hiển thị bàn cờ vua kích thước n*n
 
+Viết form login + register
+- Khi login thì 
++ Check username có bằng tên các bạn không? mk có giống không?
++ Trả về đăng nhập thành công hoặc thất bại
