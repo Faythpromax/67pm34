@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use App\Http\Middleware\CheckTimeAccess;
 
 class ProductController extends Controller
 {
@@ -41,9 +43,11 @@ class ProductController extends Controller
         $password = $request->input('password');
 
         if ($name === 'LXH' && $password === '123456') {
-            return redirect('/product/logindone')->with('loginState', 'Dang nhap thanh cong');
+            // return redirect('/product/logindone')->with('loginState', 'Dang nhap thanh cong');
+            return "Dang nhap thanh cong";
         } else {
-            return redirect('/product/login')->with('loginState', 'Dang nhap that bai');
+            // return redirect('/product/login')->with('loginState', 'Dang nhap that bai');
+            return "Dang nhap that bai";
         }
     }
 
@@ -63,4 +67,18 @@ class ProductController extends Controller
         var_dump($request->input('password'));
     }
 
+    public function age() {
+        return view ('product.age');
+    }
+
+    public function checkAge(Request $request)
+    {
+        // Nếu middleware cho qua => chắc chắn >=18
+        session([
+            'age_verified' => true,
+            'age' => $request->age
+        ]);
+
+        return redirect('/product');
+    }
 }

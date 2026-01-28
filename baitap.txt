@@ -14,7 +14,12 @@
         name mặc định "Luong Xuan Hieu", mssv mặc định "123456" (in ra text thôi)
     - "/banco/{n}": trả về view banco hiển thị bàn cờ vua kích thước n*n
 
+                                    29/01/2026
 Viết form login + register
 - Khi login thì 
 + Check username có bằng tên các bạn không? mk có giống không?
 + Trả về đăng nhập thành công hoặc thất bại
+
+Viết middleware CheckAge
+- Kiểm tra tuổi >=18 hay không sau khi nhập age
+- Tạo session cho CheckAge
