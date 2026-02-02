@@ -12,30 +12,37 @@ Route::get('', function () {
     return view('home');
 });
 
+// Route::resource('product', ProductController::class);
+
 Route::prefix('product') -> group(function () {
     Route::controller(ProductController::class)->group(function () {
-        // Route::get('/', 'index') -> middleware(CheckTimeAccess::class);
-        // Route::get('/add', 'create')->name('add') -> middleware(CheckTimeAccess::class);
-        // Route::get('/detail/{id?}', 'getDetail') -> middleware(CheckTimeAccess::class);
-        // Route::post('/store', 'store');
 
         Route::get('/age', 'age') -> name('product.age');
         Route::post('/checkAge', 'checkAge')->middleware(CheckAge::class);
         
         Route::get('/login', 'login');
         Route::post('/checklogin', 'checkLogin');
-        // Route::get('/logindone', 'loginDone');
+
         Route::get('/register', 'register');
         Route::post('/checkRegister', 'checkRegister');
 
-        Route::middleware(CheckSessionAge::class)->group(function () {
-            Route::controller(ProductController::class)->group(function () {
-                Route::get('/', 'index');
-                Route::get('/detail/{id?}', 'getDetail');
-                Route::get('/add', 'create') -> name('add');
-                Route::post('/store', 'store');
-            }) -> middleware(CheckTimeAccess::class); 
-        });
+        Route::get('/', 'index');
+        Route::get('/detail/{id?}', 'getDetail');
+        Route::get('/add', 'create') -> name('add');
+        Route::post('/store', 'store');
+
+        Route::get('/edit/{id?}', 'edit');
+        Route::post('/update/{id?}', 'update');
+        Route::post('/delete/{id?}', 'delete');
+
+        // Route::middleware(CheckSessionAge::class)->group(function () {
+        //     Route::controller(ProductController::class)->group(function () {
+        //         Route::get('/', 'index');
+        //         Route::get('/detail/{id?}', 'getDetail');
+        //         Route::get('/add', 'create') -> name('add');
+        //         Route::post('/store', 'store');
+        //     }) -> middleware(CheckTimeAccess::class); 
+        // });
     });
 });
 

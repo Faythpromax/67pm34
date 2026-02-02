@@ -10,9 +10,9 @@ class CheckSessionAge
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (!session()->has('age_verified')) {
-            return redirect()->route('product.age');
-        }
+        // if (!session()->has('age_verified')) {
+        //     return redirect()->route('product.age');
+        // }
 
         return $next($request);
     }

@@ -9,6 +9,8 @@
             <input type="text" id="name" name="name" required><br><br>
             <label for="price">Price:</label>
             <input type="text" id="price" name="price" required><br><br>
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" name="stock" required><br><br>
             <input type="submit" value="Add Product">
         </form>
     </body>
