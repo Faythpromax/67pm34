@@ -20,20 +20,16 @@ class ProductController extends Controller
     public function index()
     {
         $product = Product::all();
-        return view('product.index', ['products' => $product]);
+        return view('admin.product.index', ['products' => $product]);
     }
 
     public function getDetail(string $id = "123") {
-        return view ('product.detail', ['id' => $id]);
+        return view ('admin.product.detail', ['id' => $id]);
     }
 
     public function create() {
-        return view ('product.add');
+        return view ('admin.product.add');
     }
-
-    // public function store(Request $request) {
-    //     var_dump($request->input('name'));
-    // }
 
     public function store(Request $request)
     {
@@ -48,7 +44,7 @@ class ProductController extends Controller
 
     public function edit(string $id)
     {
-        return view('product.edit', ['product' => Product::find($id)]);
+        return view('admin.product.edit', ['product' => Product::find($id)]);
     }
 
     public function update(Request $request, string $id)
@@ -71,26 +67,26 @@ class ProductController extends Controller
         return redirect('/product');
     }
 
-    public function login() {
-        return view ('product.login');
-    }
+    // public function login() {
+    //     return view ('product.login');
+    // }
 
     public function loginDone() {
         return view ('product.logindone');
     }
     
-    public function checkLogin(Request $request) {
-        $name = $request->input('name');
-        $password = $request->input('password');
+    // public function checkLogin(Request $request) {
+    //     $name = $request->input('name');
+    //     $password = $request->input('password');
 
-        if ($name === 'LXH' && $password === '123456') {
-            // return redirect('/product/logindone')->with('loginState', 'Dang nhap thanh cong');
-            return "Dang nhap thanh cong";
-        } else {
-            // return redirect('/product/login')->with('loginState', 'Dang nhap that bai');
-            return "Dang nhap that bai";
-        }
-    }
+    //     if ($name === 'LXH' && $password === '123456') {
+    //         // return redirect('/product/logindone')->with('loginState', 'Dang nhap thanh cong');
+    //         return "Dang nhap thanh cong";
+    //     } else {
+    //         // return redirect('/product/login')->with('loginState', 'Dang nhap that bai');
+    //         return "Dang nhap that bai";
+    //     }
+    // }
 
     public function register() {
         return view ('product.register');

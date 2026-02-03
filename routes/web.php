@@ -5,14 +5,20 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Middleware\CheckAge;
 use App\Http\Middleware\CheckTimeAccess;
-use App\Http\Controllers\TestController;
-
+use App\Http\Controllers\AuthController;
 
 Route::get('', function () {
     return view('home');
 });
 
-// Route::resource('product', ProductController::class);
+Route::get('/admin', function () {
+    return view('/layout/admin');
+});
+
+Route::get('/login', [AuthController::class, 'showLogin']);
+Route::post('/checklogin', [AuthController::class, 'checkLogin']) -> name('checkLogin');
+
+// Route::resource(name: 'product', ProductController::class);
 
 Route::prefix('product') -> group(function () {
     Route::controller(ProductController::class)->group(function () {
@@ -20,15 +26,15 @@ Route::prefix('product') -> group(function () {
         Route::get('/age', 'age') -> name('product.age');
         Route::post('/checkAge', 'checkAge')->middleware(CheckAge::class);
         
-        Route::get('/login', 'login');
-        Route::post('/checklogin', 'checkLogin');
+        // Route::get('/login', 'login');
+        // Route::post('/checklogin', 'checkLogin');
 
         Route::get('/register', 'register');
         Route::post('/checkRegister', 'checkRegister');
 
-        Route::get('/', 'index');
+        Route::get('/', action: 'index');
         Route::get('/detail/{id?}', 'getDetail');
-        Route::get('/add', 'create') -> name('add');
+        Route::get('/add', 'create');
         Route::post('/store', 'store');
 
         Route::get('/edit/{id?}', 'edit');
@@ -45,8 +51,6 @@ Route::prefix('product') -> group(function () {
         // });
     });
 });
-
-Route::resource('test', TestController::class);
 
 Route::get('sinhvien', function () {
     return view('sinhvien.detail', ['name' => 'Luong Xuan Hieu', 'mssv' => 123456]);
