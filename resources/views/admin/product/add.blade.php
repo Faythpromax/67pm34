@@ -1,6 +1,6 @@
 @extends('layout.admin')
+
 @section('content')
-    <title>Hello</title>
     <h1>Add New Product</h1>
     <form action="/product/store" method="POST">
         @csrf

@@ -88,21 +88,6 @@ class ProductController extends Controller
     //     }
     // }
 
-    public function register() {
-        return view ('product.register');
-    }
-
-    public function checkRegister(Request $request) {
-        $request->validate([
-            'name' => 'required|string',
-            'fullname' => 'required|string',
-            'password' => 'required|string',
-        ]);
-
-        var_dump($request->input('name'));
-        var_dump($request->input('fullname'));
-        var_dump($request->input('password'));
-    }
 
     public function age() {
         return view ('product.age');

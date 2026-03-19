@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Middleware\CheckAge;
 use App\Http\Middleware\CheckTimeAccess;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 
 Route::get('', function () {
     return view('home');
@@ -17,7 +18,8 @@ Route::get('/admin', function () {
 
 Route::get('/login', [AuthController::class, 'showLogin']);
 Route::post('/checklogin', [AuthController::class, 'checkLogin']) -> name('checkLogin');
-
+Route::get('/register', [AuthController::class, 'register']);
+Route::post('/checkRegister', [AuthController::class, 'checkRegister']) -> name('checkRegister');
 // Route::resource(name: 'product', ProductController::class);
 
 Route::prefix('product') -> group(function () {
@@ -29,8 +31,6 @@ Route::prefix('product') -> group(function () {
         // Route::get('/login', 'login');
         // Route::post('/checklogin', 'checkLogin');
 
-        Route::get('/register', 'register');
-        Route::post('/checkRegister', 'checkRegister');
 
         Route::get('/', action: 'index');
         Route::get('/detail/{id?}', 'getDetail');
@@ -49,6 +49,17 @@ Route::prefix('product') -> group(function () {
         //         Route::post('/store', 'store');
         //     }) -> middleware(CheckTimeAccess::class); 
         // });
+    });
+});
+
+Route::prefix('category')->group(function () {
+    Route::controller(CategoryController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::get('/create', 'create');
+        Route::post('/store', 'store');
+        Route::get('/edit/{id}', 'edit');
+        Route::post('/update/{id}', 'update');
+        Route::post('/delete/{id}', 'destroy');
     });
 });
 
