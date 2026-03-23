@@ -34,12 +34,13 @@ Route::prefix('product') -> group(function () {
 
         Route::get('/', action: 'index');
         Route::get('/detail/{id?}', 'getDetail');
+        Route::get('/create', 'create');
         Route::get('/add', 'create');
         Route::post('/store', 'store');
 
         Route::get('/edit/{id?}', 'edit');
         Route::post('/update/{id?}', 'update');
-        Route::post('/delete/{id?}', 'delete');
+        Route::post('/delete/{id?}', 'destroy');
 
         // Route::middleware(CheckSessionAge::class)->group(function () {
         //     Route::controller(ProductController::class)->group(function () {

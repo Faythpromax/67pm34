@@ -22,7 +22,7 @@ class CategoryController extends Controller
     {
         $parentCategories = $this->getAvailableParentCategories();
 
-        return view('admin.category.create', ['parentCategories' => $parentCategories]);
+        return view('admin.category.add', ['parentCategories' => $parentCategories]);
     }
 
     public function store(Request $request): RedirectResponse

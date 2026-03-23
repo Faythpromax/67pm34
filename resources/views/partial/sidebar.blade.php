@@ -98,6 +98,29 @@
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-box"></i>
+              <p>
+                Quan ly San pham
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ url('/product') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Xem danh sach</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ url('/product/create') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Them moi</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
                 Layout Options

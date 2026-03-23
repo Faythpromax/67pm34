@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Category;
+use Illuminate\Validation\Rule;
+use Illuminate\Http\RedirectResponse;
 
 class ProductController extends Controller
 {
@@ -17,10 +20,34 @@ class ProductController extends Controller
     //     ]]);
     // }
 
-    public function index()
+    public function index(Request $request)
     {
-        $product = Product::all();
-        return view('admin.product.index', ['products' => $product]);
+        $keyword = $request->input('keyword');
+        $categoryId = $request->input('category_id');
+
+        $query = Product::with('category')
+            ->where('is_delete', false);
+
+        if (!empty($keyword)) {
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', '%' . $keyword . '%')
+                    ->orWhere('sku', 'like', '%' . $keyword . '%');
+            });
+        }
+
+        if (!empty($categoryId)) {
+            $query->where('category_id', $categoryId);
+        }
+
+        $products = $query->orderBy('id', 'desc')->get();
+        $categories = Category::where('is_delete', false)->orderBy('name')->get();
+
+        return view('admin.product.index', [
+            'products' => $products,
+            'categories' => $categories,
+            'keyword' => $keyword,
+            'categoryId' => $categoryId,
+        ]);
     }
 
     public function getDetail(string $id = "123") {
@@ -28,43 +55,104 @@ class ProductController extends Controller
     }
 
     public function create() {
-        return view ('admin.product.add');
+        $categories = Category::where('is_delete', false)->orderBy('name')->get();
+
+        return view('admin.product.add', ['categories' => $categories]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $product = new Product;
-        $product -> name = $request -> input('name');
-        $product -> price = $request -> input('price');
-        $product -> stock = $request -> input('stock');
-        $product -> save();
+        $validated = $request->validate([
+            'category_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('categories', 'id')->where(fn ($query) => $query->where('is_delete', false)),
+            ],
+            'name' => 'required|string|max:255',
+            'sku' => 'nullable|string|max:100',
+            'price' => 'required|numeric|min:0',
+            'sale_price' => 'nullable|numeric|gt:0|lte:price',
+            'stock' => 'required|integer|min:0',
+            'description' => 'nullable|string',
+            'image' => 'nullable|string|max:255',
+            'is_active' => 'nullable|boolean',
+        ]);
+
+        Product::create([
+            'category_id' => $validated['category_id'] ?? null,
+            'name' => $validated['name'],
+            'sku' => $validated['sku'] ?? null,
+            'price' => $validated['price'],
+            'sale_price' => $validated['sale_price'] ?? null,
+            'stock' => $validated['stock'],
+            'description' => $validated['description'] ?? null,
+            'image' => $validated['image'] ?? null,
+            'is_active' => $request->boolean('is_active', true),
+            'is_delete' => false,
+        ]);
 
         return redirect('/product');
     }
 
     public function edit(string $id)
     {
-        return view('admin.product.edit', ['product' => Product::find($id)]);
+        $product = Product::where('is_delete', false)->findOrFail($id);
+        $categories = Category::where('is_delete', false)->orderBy('name')->get();
+
+        return view('admin.product.edit', [
+            'product' => $product,
+            'categories' => $categories,
+        ]);
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): RedirectResponse
     {
-        //
-        $product = Product::find($id);
-        $product -> name = $request -> input('name');
-        $product -> price = $request -> input('price');
-        $product -> stock = $request -> input('stock');
+        $product = Product::where('is_delete', false)->findOrFail($id);
 
-        $product -> save();
+        $validated = $request->validate([
+            'category_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('categories', 'id')->where(fn ($query) => $query->where('is_delete', false)),
+            ],
+            'name' => 'required|string|max:255',
+            'sku' => 'nullable|string|max:100',
+            'price' => 'required|numeric|min:0',
+            'sale_price' => 'nullable|numeric|gt:0|lte:price',
+            'stock' => 'required|integer|min:0',
+            'description' => 'nullable|string',
+            'image' => 'nullable|string|max:255',
+            'is_active' => 'nullable|boolean',
+        ]);
+
+        $product->update([
+            'category_id' => $validated['category_id'] ?? null,
+            'name' => $validated['name'],
+            'sku' => $validated['sku'] ?? null,
+            'price' => $validated['price'],
+            'sale_price' => $validated['sale_price'] ?? null,
+            'stock' => $validated['stock'],
+            'description' => $validated['description'] ?? null,
+            'image' => $validated['image'] ?? null,
+            'is_active' => $request->boolean('is_active', false),
+        ]);
 
         return redirect('/product');
     }
 
-    public function delete(string $id)
+    public function destroy(string $id): RedirectResponse
     {
-        $product = Product::find($id);
-        $product -> delete();
+        $product = Product::where('is_delete', false)->findOrFail($id);
+        $product->is_delete = true;
+        $product->save();
+
         return redirect('/product');
+    }
+
+    public function delete(string $id): RedirectResponse
+    {
+        // Backward compatibility for existing /product/delete route.
+        return $this->destroy($id);
     }
 
     // public function login() {
